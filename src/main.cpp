@@ -2,8 +2,6 @@
 #include <ArduinoBLE.h>
 #include <FastLED.h>
 
-#include <vector>
-
 
 #define HEADWIND_BLE_ADDRESS "c9:a5:2c:c7:ba:b7" // lowercase
 #define SERVICE_UUID "A026EE0C-0A7D-4AB3-97FA-F1500F9FEB8B"
@@ -114,8 +112,8 @@ void loop()
     if (connected && !didManualSwitch)
     {
         Serial.println("Connected, switching to manual mode");
-        std::vector<uint8_t> data = {0x04, 0x04};
-        pRemoteCharacteristic.writeValue(data.data(), data.size());
+        uint8_t data[] = {0x02, 0x04};
+        pRemoteCharacteristic.writeValue(data, sizeof(data));
         didManualSwitch = true;
     }
     else if (connected && didManualSwitch)
@@ -123,8 +121,8 @@ void loop()
         float speed = 20 * (sin((2 * M_PI * millis()) / 30000) + 1);
         Serial.print("Speed is: ");
         Serial.println(speed);
-        std::vector<uint8_t> speedData = {0x02, static_cast<uint8_t>(speed)};
-        pRemoteCharacteristic.writeValue(speedData.data(), speedData.size());
+        uint8_t speedData[] = {0x02, static_cast<uint8_t>(speed)};
+        pRemoteCharacteristic.writeValue(speedData, sizeof(speedData));
     }
 
     Serial.println("busy");
